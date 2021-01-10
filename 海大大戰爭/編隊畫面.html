@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "utf-8">
+        <title>海大大戰爭_編隊</title>
+        <style type = "text/css">
+        table, th, td {
+            border: 5px #FFD382;
+            border-collapse: collapse;
+            border-style:groove;
+            text-align: center;
+            font-size:20px;
+        }
+        #battle{
+            position: absolute;
+            left:50%;
+            top:7.5%;
+            margin-left: -201px;
+        }
+        #warehouse{
+            position: absolute;
+            left:50%;
+            top:35%;
+            margin-left: -201px;
+        }
+        td{
+            width:90px;
+            height:105px;
+            text-align: center;
+        }
+        img{
+            width:87%;
+            height:87%;
+        }
+        .imgg:hover{
+            cursor:pointer;
+            border: 3px solid green ;
+        }
+        .button {
+            border: none;
+            color:black;
+            text-align: center;
+            display: inline-block;
+            padding: 16px 32px; /*按鈕內文字框框比*/
+            font-size: 30px;    /*按鈕大小*/
+            transition-duration: 0.5s; /*speed*/
+            cursor: pointer;
+        }
+        .button1 {
+            background-color:orange; 
+            color: black; 
+            border: 2px solid white;
+        }
+
+        .button1:hover {
+            background-color: orangered;
+            color:black;
+            border: 2px solid blue;
+        }
+        
+        </style>
+        <script>
+            let warehouse=[0,0,0,0,0,1];
+            let battle=[0,0,0];
+            let warehouse_num=[0,0,0,0,0,0];
+            let saved;
+            function start(){
+                load_warehouse();
+                load_battle();
+                saved=1;
+                if(!localStorage.getItem("闖到第幾關")){
+                    localStorage.setItem("闖到第幾關",1);
+                }
+                if(!localStorage.getItem('金幣')){
+                    localStorage.setItem('金幣',100);
+                }
+            }
+            function load_warehouse(){
+                if(JSON.parse(localStorage.getItem('倉庫'))!=null){
+                    warehouse=JSON.parse(localStorage.getItem('倉庫'));
+                }
+                else{
+                    localStorage.setItem('倉庫',JSON.stringify(warehouse));
+                }
+                for(let i=0;i<6;i++){
+                    let j=1;
+                    let target_block=document.getElementById("warehouse"+j);
+                    while(target_block.hasChildNodes()){
+                        j++;
+                        target_block=document.getElementById("warehouse"+j);
+                    }
+                    if(warehouse[i]==1){
+                        let child=document.createElement("img");
+                        child.setAttribute("src",(i+1)+".png");
+                        child.setAttribute("id",(i+1)+".png");
+                        child.setAttribute("class","imgg");
+                        child.setAttribute("draggable","true");
+                        child.setAttribute("ondragstart","drag(event)");
+                        target_block.appendChild(child);
+                    }
+                }
+            }
+            function save_warehouse(){
+                warehouse=[0,0,0,0,0,0];
+                for(let i=0;i<6;i++){
+                    target_block=document.getElementById("warehouse"+(i+1));
+                    if(target_block.hasChildNodes()){
+                        let imgid=target_block.firstChild.getAttribute("src");
+                        warehouse[imgid[0]-1]=1;
+                    }
+                }
+                localStorage.setItem('倉庫',JSON.stringify(warehouse));
+            }
+            function load_battle(){
+                if(JSON.parse(localStorage.getItem('上場'))!=null){
+                    battle=JSON.parse(localStorage.getItem('上場'));
+                }
+                else{
+                    localStorage.setItem('上場',JSON.stringify(battle));
+                }
+                for(let i=0;i<3;i++){
+                    let target_block=document.getElementById("battle"+(i+1));
+                    if(target_block.hasChildNodes()){
+                        target_block.removeChild(target_block.firstChild.id);
+                    }
+                    if(battle[i]==0){
+                        continue;
+                    }
+                    let child=document.createElement("img");
+                    child.setAttribute("src",battle[i]+".png");
+                    child.setAttribute("id",battle[i]+".png");
+                    child.setAttribute("class","imgg");
+                    child.setAttribute("draggable","true");
+                    child.setAttribute("ondragstart","drag(event)");
+                    target_block.appendChild(child);
+                }
+            }
+            function save_battle(){
+                for(let i=0;i<3;i++){
+                    let target_block=document.getElementById("battle"+(i+1));
+                    if(target_block.hasChildNodes()){
+                        let imgid=target_block.firstChild.getAttribute('src');
+                        battle[i]=parseInt(imgid[0]);
+                        
+                    }
+                    else{
+                        battle[i]=0;
+                    }
+                }
+                localStorage.setItem('上場',JSON.stringify(battle));
+            }
+            function save_all(){
+                if(confirm("是否儲存當前配置?")){
+                    save_warehouse();
+                    save_battle();
+                    saved=1;
+                }
+            }
+            function turn_to_map(){
+                if(saved==1){
+                    location.href='關卡地圖畫面.html';
+                }
+                else if(confirm("是否儲存當前配置?")){
+                    save_warehouse();
+                    save_battle();
+                    saved=1;
+                    location.href='關卡地圖畫面.html';
+                }
+                else{
+                    location.href='關卡地圖畫面.html';
+                }
+            }
+            //以下三個function用於拖曳
+            function allowDrop(ev) {
+                ev.preventDefault();
+            }
+            function drag(ev) {
+                ev.dataTransfer.setData("text", ev.target.id);
+            }
+            function drop(ev) {
+                ev.preventDefault();
+                var data = ev.dataTransfer.getData("text");
+                //如果要被放東西的格子已經有圖片,就交換圖片
+                if(ev.target.parentNode.id!=''){
+                    for(let i=1;i<4;i++){
+                        let target_block=document.getElementById("battle"+i);
+                        if(target_block.hasChildNodes()){
+                            if(target_block.firstChild.id==data){
+                                let drag_block=target_block;
+                                let drop_block=document.getElementById(ev.target.parentNode.id);
+                                let drag_img=document.getElementById(data);
+                                let drop_img=document.getElementById(drop_block.firstChild.id);
+                                //如果要被放東西的格子是原本的格子，則不進行任何動作
+                                if(drag_block.id==drop_block.id){
+                                    return;
+                                }
+                                drag_block.removeChild(drag_img);
+                                drop_block.removeChild(drop_img);
+                                setTimeout(function(){
+                                    drag_block.appendChild(drop_img);
+                                    drop_block.appendChild(drag_img);
+                                    return;
+                                },50);
+                            }
+                        }
+                    }   
+                    for(let i=1;i<7;i++){
+                        let target_block=document.getElementById("warehouse"+i);
+                        if(target_block.hasChildNodes()){
+                            if(target_block.firstChild.id==data){
+                                let drag_block=target_block;
+                                let drop_block=document.getElementById(ev.target.parentNode.id);
+                                let drag_img=document.getElementById(data);
+                                let drop_img=document.getElementById(drop_block.firstChild.id);
+                                //如果要被放東西的格子是原本的格子，則不進行任何動作
+                                if(drag_block.id==drop_block.id){
+                                    return;
+                                }
+                                drag_block.removeChild(drag_img);
+                                drop_block.removeChild(drop_img);
+                                setTimeout(function(){
+                                    drag_block.appendChild(drop_img);
+                                    drop_block.appendChild(drag_img);
+                                    return;
+                                },50);
+                            }
+                        }
+                    }   
+                }
+                //如果要被放東西的格子沒有圖片
+                else{
+                    //下面的if是用來排除bug
+                    if(ev.target.hasChildNodes()){
+                        return;
+                    }
+                    ev.target.appendChild(document.getElementById(data));
+                }
+                if(saved==1){
+                    saved=0;
+                }
+            }
+            //以上三個function用於拖曳
+            window.addEventListener("load",start,false);
+        </script>
+    </head>
+    <body>
+        <a style="font-size: 40px;">▲編隊▲</a>
+        <table id="battle" width=400px>
+            <caption style="font-size: 30px;">上場隊伍</caption>
+            <tr>
+                <th>隊員1</th>
+                <th>隊員2</th>
+                <th>隊員3</th>
+            </tr>
+            <tr>
+                <td id=battle1 ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                <td id=battle2 ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                <td id=battle3 ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+            </tr>
+        </table>
+        <table id="warehouse" width=400px>
+            <caption style="font-size: 30px;">倉庫(拖曳移動角色)</caption>
+            <tr>
+                <th>倉庫1</th>
+                <th>倉庫2</th>
+                <th>倉庫3</th>
+            </tr>
+            <tr>
+                <td id=warehouse1 ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                <td id=warehouse2 ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                <td id=warehouse3 ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+            </tr>
+            <tr>
+                <th>倉庫4</th>
+                <th>倉庫5</th>
+                <th>倉庫6</th>
+            </tr>
+            <tr>
+                <tr>
+                <td id=warehouse4 ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                <td id=warehouse5 ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+                <td id=warehouse6 ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+            </tr>
+
+        </table>
+        <button id="turn_to_map" class="button button1" style="position: absolute;top:75%;left:0%;margin-top: 100px;margin-left: 30px;" onclick="turn_to_map();">返回地圖</button>
+        <button id="turn_to_map" class="button button1" style="position: absolute;top:75%;left:0%;margin-top: 100px;margin-left: 230px;" onclick="save_all();">儲存隊伍</button>
+    
+    </body>
+</html>
