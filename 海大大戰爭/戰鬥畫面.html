@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "utf-8">
+        <title>海大大戰爭_戰鬥</title>
+        <style type = "text/css">
+            body{
+                background:black url('戰鬥背景.JPG') 100% 0% fixed no-repeat;
+                background-size: 100% 68%;
+            }
+            table{
+                background-color:rgb(37, 187, 82);
+                border: 3px #4d06f3;
+                border-collapse: collapse;
+                border-style:groove;
+                width: 50%;
+                position:absolute;
+                top:0%;
+                left:25%;
+                z-index: 13;
+                text-align: center;
+                visibility:visible;
+            }
+            td{
+                border: 3px #4d06f3;
+                border-collapse: collapse;
+                border-style:groove;
+            }
+            p{
+                text-align:start;
+                font-size: 15px;
+            }
+            p > a{
+                color:red;
+                font-size: 25px;
+                font-weight: bolder;
+            }
+            p > span{
+                color:navy;
+            }
+            p[id="max"]{
+                color:red;
+                font-weight: bolder;
+            }
+            .castle_HP{
+                border:3px solid black;
+                width:25%;
+                height:5%;
+            }
+            .castle{
+                border:0px solid black;
+                width:12.5%;
+                height:50%;
+            }
+            .teamblock{
+                border: 3px #FFD382;
+                border-collapse: collapse;
+                border-style:groove;
+                text-align: center;
+                font-size:20px;
+                width:10%; 
+                height:25%;
+            }
+            .game_pause{
+                position: absolute;
+                top:85%;
+                left:80%;
+                width:16%;
+                height:10%;
+                z-index: 11;
+            }
+            .game_pause:hover{
+                position: absolute;
+                top:84%;
+                left:79%;
+                width:18%;
+                height:12%;
+                z-index: 11;
+            }
+            .improve_game_speed{
+                position: absolute;
+                top:85%;
+                left:60%;
+                width:16%;
+                height:10%;
+            }
+            .improve_game_speed:hover{
+                position: absolute;
+                top:84%;
+                left:59%;
+                width:18%;
+                height:12%;
+            }
+            .improve_money_yield{
+                position: absolute;
+                top:71%;
+                left:70%;
+                width:16%;
+                height:10%;
+            }
+            .improve_money_yield:hover{
+                position: absolute;
+                top:70%;
+                left:69%;
+                width:18%;
+                height:12%;
+            }
+            .improve_money_yield_disable{
+                position: absolute;
+                opacity: 50%;
+                top:71%;
+                left:70%;
+                width:16%;
+                height:10%;
+            }
+            .description{
+                background-color: goldenrod;
+                border: 3px navy;
+                border-collapse: collapse;
+                border-style:groove;
+                text-align: center;
+                font-size:20px;
+                width:15%; 
+                height:25%;
+            }
+            .teammember_img_disable{
+                opacity:50%;
+            }
+            .teammember_img:hover{
+                border:3px solid green;
+                cursor: pointer;
+            }
+            .button {
+                border: none;
+                color:black;
+                
+                text-align: center;
+                display: inline-block;
+                padding: 16px 16px; /*按鈕內文字框框比*/
+                font-size: 25px;    /*按鈕大小*/
+                transition-duration: 0.5s; /*speed*/
+                cursor: pointer;
+            }
+            .button[id="turn_to_map"]{
+                position: absolute;
+                top:0%;
+                left:100%;
+                margin-left: -150px;   /*按鈕位置*/
+                z-index: 11;
+            }
+            .button1 {
+                background-color:orange; 
+                color: black; 
+                border: 2px solid white;
+            }
+            .button1:hover {
+                background-color: orangered;
+                color: black;
+                border: 2px solid blue;
+            }
+            .when_game_pause_yes{
+                background-color: black;
+                opacity: 60%;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top:0%;
+                left:0%;
+                z-index: 10;
+            }
+            .when_game_pause_no{
+                position: absolute;
+                width: 0px;
+                height: 0px;
+                top:0%;
+                left:0%;
+            }
+            #money_div{
+                border:5px solid black;
+                font-size: 25px;
+                background-color: #FFD382;
+                width:30%;
+            }
+            #ground{
+                width:100%;
+                height:5%;
+            }
+            @media screen and (max-width: 700px) {
+                .button[id="turn_to_map"]{
+                    padding: 8px 16px;
+                    font-size: 15px; 
+                    position: absolute;
+                    top:0%;
+                    left:85%;
+                    margin-top: 15px;
+                    margin-left: -35px;   /*按鈕位置*/
+                }
+                #money_div{
+                border:5px solid black;
+                font-size: 15px;
+                background-color: #FFD382;
+                width:30%;
+                }
+                p{
+                text-align:start;
+                font-size: 9px;
+                }
+                p > a{
+                    color:red;
+                    font-size: 18px;
+                    font-weight: bolder;
+                }
+            }
+            @media (max-height: 550px){
+                .button[id="turn_to_map"]{
+                    padding: 8px 8px;
+                    font-size: 8px; 
+                    position: absolute;
+                    top:0%;
+                    left:85%;
+                    margin-top: -10px;
+                    margin-left: -35px;   /*按鈕位置*/
+                }
+                #money_div{
+                border:5px solid black;
+                font-size: 12px;
+                background-color: #FFD382;
+                width:30%;
+                }
+                p{
+                text-align:start;
+                font-size: 3px;
+                }
+                p > a{
+                    color:red;
+                    font-size: 7px;
+                    font-weight: bolder;
+                }
+            }
+        </style>
+        <script>
+            /*系統*/
+            let max_game_stage;//闖到第幾關
+            let game_stage;//當前第幾關
+            let game_is_playing=0;//遊戲是否進行或暫停
+            let game_speed=1;//遊戲速度倍率
+            let game_is_ended=0;//遊戲是否結束
+
+            /*音樂與音效*/
+            let bgm = new Audio("war.mp3");//背景音樂
+            let gameover_win_bgm=new Audio("gameover_win.mp3");//勝利
+            let gameover_lose_bgm=new Audio("gameover_lose.mp3");//失敗
+            let bomb_bgm=new Array(200);//單位死亡音效
+                for(let ii=0;ii<200;ii++){
+                    bomb_bgm[ii]=new Audio("bomb.mp3");
+                }
+            /*金錢*/
+            let battle_money=0;
+            let enemy_battle_money=0;
+            let max_battle_money=1000;//設定金幣上限
+            let addmoney_per_millisecond=5;//設定我方每0.1秒加多少錢
+            let improve_addmoney_speed_money=[100,200,300,400,500];//設定(提高金錢產出速率)所需要付出的金錢，第n格代表第n次所需金錢
+            let improve_addmoney_speed_time=0;//紀錄(提高金錢產出速率)次數
+            let enemy_addmoney_per_millisecond=5;//設定敵方每0.1秒加多少錢
+
+            /*單位數據設定(hp是生存能力同時也是對敵方士兵的攻擊力，而atk是指打主堡的傷害，money則是生產這個士兵要花的金錢)*/
+            //第n格代表該隊員圖片名稱為n.jpg 
+            let unit_hp =  [100,75,150,125,175,50];
+            let unit_atk=  [ 10, 9, 14, 12, 17, 8];
+            let unit_money=[200,150,300,250,400,100];
+            //第n格代表第n關的敵人
+            let enemy_unit_hp= [50,75,100,125,150,175];
+            let enemy_unit_atk=[8,9,10,15,25,35];
+            let enemy_unit_money=150;
+
+            /*單位說明欄位設定*/
+            let description_name=['養殖魚','食科甜甜圈','電雞','資工米老鼠','商船','文創筆']
+            let description_hp=['★★','★☆','★★★★','★★★','★★★★★','★']
+
+            /*主堡生命*/
+            let max_ours_HP=100;//設定我方主堡生命值上限
+            let max_enemys_HP=100;//設定敵方主堡生命值上限
+            let ours_HP=max_ours_HP;
+            let enemys_HP=max_enemys_HP;
+
+            /*編隊設定、上場人數以及上場數據設定*/
+            let battle=[0,0,0];//用於讀取編隊頁面的資料
+                /*我方*/
+            let number_of_ours_teammember=0;//你的編隊中共有幾種隊員
+            let max_num_of_ours_member_on_battlefield=99;//以下可設定我方上場人數上限-
+            let num_of_ours_member_on_battlefield=0;//紀錄目前我方上場人數
+            let data_of_ours_member_on_battlefield=new Array(99);//儲存我方已上場單位的資料
+            let teammember_cost=[0,0,0,0]//生產隊員會扣多少錢(第n格為你的編隊中的第n個成員，若第n個隊員為空則為第n格0,第0格不會用到)，數值在set_team function中設定
+            let teammember_hp=[0,0,0,0]
+            let teammember_atk=[0,0,0,0]
+            let teammember_description=[0,0,0,0]
+                /*敵方*/
+            let max_num_of_enemys_member_on_battlefield=99;//以下可設定敵方上場人數上限
+            let num_of_enemys_member_on_battlefield=0;//紀錄目前敵方上場人數
+            let data_of_enemys_member_on_battlefield=new Array(99);//儲存敵方已上場單位的資料
+            let enemy_cost=10;//敵方生產隊員會扣多少錢
+           
+            function start(){
+                if(!localStorage.getItem('闖到第幾關')){
+                    localStorage.setItem('闖到第幾關',1);
+                }
+                else{
+                    max_game_stage=localStorage.getItem("闖到第幾關");
+                }
+                if(!localStorage.getItem('當前關卡')){
+                    localStorage.setItem('當前關卡',1);
+                }
+                else{
+                    game_stage=localStorage.getItem("當前關卡");
+                }
+                if(!localStorage.getItem('上場')){
+                    localStorage.setItem('上場',JSON.stringify([0,0,0]));
+                }
+                else{
+                    battle=JSON.parse(localStorage.getItem('上場'));
+                }
+                turn_to_battle_img=document.createElement('img');
+                turn_to_battle_img.setAttribute('src','turn_to_battle.png');
+                turn_to_battle_img.setAttribute('id','turn_to_battle_img');
+                turn_to_battle_img.setAttribute('style','width:100%;height:100%;position:absolute;top:0%;left:0%;z-index:10;');
+                document.body.appendChild(turn_to_battle_img);
+                document.body.setAttribute('style',"background-color: white;");
+                for(let j=0;j<20;j++){
+                    setTimeout(function(){
+                        document.getElementById('turn_to_battle_img').setAttribute('style','width:'+(95-5*j)+'%;height:100%;position:absolute;top:0%;left:'+(5+5*j)+'%;z-index:10;');
+                    },25*j);
+                }
+                setTimeout(function(){
+                    document.getElementById("body_all").setAttribute('style',"visibility:visible;");
+                    set_build(game_stage);
+                    set_team();
+                },50);
+                setTimeout(function(){
+                    ready();
+                },500);
+            }
+            /*set_build()跟set_team()這兩個function用來讀取localstorage以設定主堡圖片、我方編隊*/
+            function set_build(i){
+                let build_img=document.createElement('img');
+                /*build_img.setAttribute('class','castle');*/
+                build_img.setAttribute('style','width:100%; height:100%;');
+                build_img.setAttribute('id','enemys_castle_img');
+                if(i==1){
+                    build_img.setAttribute('src','cakebulid.jpg');
+                }
+                else if(i==2){
+                    build_img.setAttribute('src','fishbulid.jpg');
+                }
+                else if(i==3){
+                    build_img.setAttribute('src','bookbulid.jpg');
+                }
+                else if(i==4){
+                    build_img.setAttribute('src','shipbulid.jpg');
+                }
+                else if(i==5){
+                    build_img.setAttribute('src','eebulid.jpg');
+                }
+                else if(i==6){
+                    build_img.setAttribute('src','csbulid.jpg');
+                }
+                else{
+                    build_img.setAttribute('src','cakebulid.jpg');
+                }
+                document.getElementById('enemys_castle').appendChild(build_img);
+                let ourbuild_img=document.createElement('img');
+                ourbuild_img.setAttribute('src','oursbulid.jpg');
+                ourbuild_img.setAttribute('id','ours_castle_img');
+                ourbuild_img.setAttribute('style','width:100%; height:100%;');
+                document.getElementById('ours_castle').appendChild(ourbuild_img);
+            }        
+            function set_team(){
+                for(let i=0;i<3;i++){
+                    if(battle[i]>0 && battle[i]<7){
+                        let teammember_img=document.createElement('img');
+                        teammember_img.setAttribute('src',battle[i]+'.jpg');
+                        teammember_img.setAttribute('class','teammember_img_disable');
+                        teammember_img.setAttribute('style','width:92%; height:92%;');
+                        teammember_img.setAttribute('onmouseover','set_description('+(battle[i]-1)+')');
+                        let j=1;
+                        while(document.getElementById('teamblock'+j).hasChildNodes()){
+                            j++;
+                        }
+                        document.getElementById('teamblock'+j).appendChild(teammember_img);
+                        teammember_img.setAttribute('id','teammember'+j);
+                        number_of_ours_teammember=j;
+                        teammember_cost[j]=unit_money[battle[i]-1];/*設定生產隊員會扣多少錢*/
+                        teammember_hp[j]=unit_hp[battle[i]-1];/*設定隊員生命值*/
+                        teammember_atk[j]=unit_atk[battle[i]-1];/*設定隊員對城堡的攻擊力*/
+                        teammember_description[j]=battle[i]-1;/*設定隊員屬性描述*/
+                    }
+                }
+            }
+            /*ready()跟fight()這兩個function用於操控戰鬥開始前的一切動作*/
+            function ready(){
+                document.getElementById('when_game_pause').setAttribute('class','when_game_pause_yes');
+                document.getElementById('when_game_pause').setAttribute('style','z-index:12;');
+                msg=document.getElementById("msg");
+                msg.innerHTML="Ready?";
+                document.getElementById("ready_fight").setAttribute('style','position:absolute; top:40%; left:50%; margin-left: -100px;visibility:visible;z-index:15;');
+            }
+            function fight(){
+                document.getElementById("ready_fight").setAttribute('style','position:absolute; top:40%; left:50%; margin-left: -100px;visibility:hidden;z-index:15;');
+                setTimeout(()=>{
+                    document.getElementById('when_game_pause').setAttribute('class','when_game_pause_no');
+                    document.getElementById('when_game_pause').setAttribute('style','');
+                    msg=document.getElementById("msg");
+                    msg.innerHTML="";
+                    battling();
+                },400);
+
+            }
+            /*battling()這個function用於控制戰鬥系統*/
+            function battling(){   
+                game_is_playing=1;     
+                battle_moneyobj=document.getElementById("battle_money");
+                ours_HPobj=document.getElementById("ours_HP");
+                enemys_HPobj=document.getElementById("enemys_HP");
+                document.getElementById("max_battle_money").innerHTML=max_battle_money;
+                /*取得我方主堡x座標*/
+                let our_castle_x=document.getElementById('ours_castle').style.left;
+                our_castle_x=our_castle_x.substr(0,our_castle_x.length-1);
+                our_castle_x=parseInt(our_castle_x);
+                /*取得敵方主堡x座標*/
+                let enemy_castle_x=document.getElementById('enemys_castle').style.left;
+                enemy_castle_x=enemy_castle_x.substr(0,enemy_castle_x.length-1);
+                enemy_castle_x=parseInt(enemy_castle_x); 
+                /*以下的setInterval用來控制bgm*/
+                var bgm_interval=setInterval  (() => {
+                    if(game_is_ended==0){
+                        bgm.play();
+                    }
+                    else{
+                        bgm.pause();
+                    }
+                },100);    
+                /*以下的setInterval用來控制金錢*/
+                var addmoney_interval=setInterval(() => {
+                    if(game_is_playing==1){
+                        improve_money_yield_obj=document.getElementById('improve_money_yield')
+                        improve_money_yield_obj.setAttribute('onmouseover','set_description(9999)')
+                        if(battle_money<max_battle_money){
+                            battle_money+=addmoney_per_millisecond*game_speed;
+                            battle_moneyobj.innerHTML=battle_money;
+                        }
+                        else{
+                            battle_money=max_battle_money;
+                            battle_moneyobj.innerHTML=battle_money;
+                        }
+                        if(enemy_battle_money<max_battle_money){
+                            enemy_battle_money+=enemy_addmoney_per_millisecond*game_speed;
+                        }
+                        else{
+                            enemy_battle_money=max_battle_money;
+                        }
+                        if(battle_money>=improve_addmoney_speed_money[improve_addmoney_speed_time]){
+                            
+                            improve_money_yield_obj.setAttribute('onclick','improve_addmoney_speed()');
+                            improve_money_yield_obj.setAttribute('class','improve_money_yield')
+                        }
+                        else{
+                            improve_money_yield_obj.setAttribute('onclick','');
+                            improve_money_yield_obj.setAttribute('class','improve_money_yield_disable')
+                        }
+                    }
+                }, 100);
+
+                /*以下的setInterval用來控制生命條以及判斷是否生命歸零(結束遊戲)*/
+                var hp_interval=setInterval(() => {
+                    if(game_is_playing==1){
+                        /*如果生命值歸零,停止遊戲*/
+                        if(ours_HP<=0 || enemys_HP<=0){
+                            game_is_playing=0;
+                            game_is_ended=1;
+                            ours_HPobj.setAttribute('width',""+max_ours_HP*(ours_HP/max_ours_HP)+"%");
+                            enemys_HPobj.setAttribute('width',""+max_enemys_HP*(enemys_HP/max_enemys_HP)+"%");
+                            castleboom=document.createElement('img');
+                            castleboom.setAttribute('src','boon.webp');
+                            
+                            if(ours_HP<=0){
+                                castleboom.setAttribute('style','width:100%; height:70%;position: absolute;top:30%;left:0%;');
+                                document.getElementById('ours_castle').appendChild(castleboom);
+                                msg=document.getElementById("msg");
+                                msg.setAttribute('style',"color:blue;font-size: 100px;font-weight: bolder;font-style: italic; position:absolute;top:20%;left:30%;");
+                                msg.innerHTML="YOU LOSE...";
+                                setTimeout(game_over,10);
+                            }
+                            else{
+                                castleboom.setAttribute('style','width:100%; height:70%;position: absolute;top:30%;left:0%;');
+                                document.getElementById('enemys_castle').appendChild(castleboom);
+                                msg=document.getElementById("msg");
+                                msg.setAttribute('style',"color:red;font-size: 100px;font-weight: bolder;font-style: italic; position:absolute;top:20%;left:30%;");
+                                msg.innerHTML="YOU WIN!!!";
+                                setTimeout(game_over,10);
+                            }
+                            
+                        }
+                        ours_HPobj.setAttribute('width',""+max_ours_HP*(ours_HP/max_ours_HP)+"%");
+                        enemys_HPobj.setAttribute('width',""+max_enemys_HP*(enemys_HP/max_enemys_HP)+"%");
+                        if(ours_HP/max_ours_HP<=0.3){
+                            ours_HPobj.setAttribute('src',"castle_hp_low.jpg");
+                        }
+                        else if(ours_HP/max_ours_HP<=0.6){
+                            ours_HPobj.setAttribute('src',"castle_hp_mid.jpg");
+                        }
+                        else{
+                            ours_HPobj.setAttribute('src',"castle_hp.jpg");
+                        }
+                        if(enemys_HP/max_enemys_HP<=0.3){
+                            enemys_HPobj.setAttribute('src',"castle_hp_low.jpg");
+                        }
+                        else if(enemys_HP/max_enemys_HP<=0.6){
+                            enemys_HPobj.setAttribute('src',"castle_hp_mid.jpg");
+                        }
+                        else{
+                            enemys_HPobj.setAttribute('src',"castle_hp.jpg");
+                        }
+                    }
+                }, 100);
+
+                /*以下的setInterval用來控制我方角色是否可以上場*/
+                var to_battlefield_interval=setInterval(() => {
+                    if(game_is_playing==1){
+                        for(let i=1;i<=number_of_ours_teammember;i++){
+                            if(battle_money>teammember_cost[i]){
+                                document.getElementById('teammember'+i).setAttribute('class','teammember_img');
+                                document.getElementById('teammember'+i).setAttribute('onclick','ours_member_go_to_battlefield('+i+')');
+                                
+                            }
+                            else{
+                                document.getElementById('teammember'+i).setAttribute('class','teammember_img_disable');
+                                document.getElementById('teammember'+i).setAttribute('onclick','');
+                            }
+                        }
+                    }
+                    else{
+                        for(let i=1;i<=number_of_ours_teammember;i++){
+                            document.getElementById('teammember'+i).setAttribute('onclick','');
+                        }
+                    }
+                }, 100);
+            
+                /*以下的setInterval用來控制敵方角色上場*/
+                var enemy_to_battlefield_interval=setInterval(() => {
+                    if(game_is_playing==1){
+                        if(enemy_battle_money>enemy_cost){
+                            enemys_member_go_to_battlefield(0);
+                        }  
+                    }
+                }, 100);
+                /*以下的setInterval用來控制我方上場角色移動*/
+                var ours_member_move_on_battlefield=setInterval(() => {
+                    if(game_is_playing==1){
+                        for(let i=0;i<num_of_ours_member_on_battlefield;i++){
+                            let the_move_member=document.getElementById('ours_member_on_battlefield'+i);
+
+                            /*可移動*/
+                            if(data_of_ours_member_on_battlefield[i].hp>0 && data_of_ours_member_on_battlefield[i].x<enemy_castle_x){
+                                data_of_ours_member_on_battlefield[i].x+=data_of_ours_member_on_battlefield[i].speed;
+                                the_move_member.setAttribute('style','position: absolute;top:52%;left:'+data_of_ours_member_on_battlefield[i].x+'%;width:12.5%;height:12.5%;');
+                                /*碰撞*/
+                                if(document.getElementById('enemys_member_on_battlefield0')){
+                                    if(Math.abs(data_of_ours_member_on_battlefield[0].x-data_of_enemys_member_on_battlefield[0].x)<10){
+                                    if(data_of_ours_member_on_battlefield[0].hp==data_of_enemys_member_on_battlefield[0].hp){
+                                        remove_ours_member_on_battlefield();
+                                        remove_enemys_member_on_battlefield();
+                                    }
+                                    else if(data_of_ours_member_on_battlefield[0].hp>data_of_enemys_member_on_battlefield[0].hp){
+                                        data_of_ours_member_on_battlefield[0].hp-=data_of_enemys_member_on_battlefield[0].hp;
+                                        remove_enemys_member_on_battlefield();
+                                    }
+                                    else if(data_of_ours_member_on_battlefield[0].hp<data_of_enemys_member_on_battlefield[0].hp){
+                                        data_of_enemys_member_on_battlefield[0].hp-=data_of_ours_member_on_battlefield[0].hp;
+                                        remove_ours_member_on_battlefield();
+                                    }
+                                }
+                                }
+                                
+                            }
+                            /*到達敵方主堡*/
+                            else if(data_of_ours_member_on_battlefield[i].hp>0 && data_of_ours_member_on_battlefield[i].x>=enemy_castle_x){
+                                enemys_HP-=10;
+                                remove_ours_member_on_battlefield();
+                            }
+                            /*被幹掉*/
+                            else if(data_of_ours_member_on_battlefield[i].hp<=0){
+                                
+                                remove_ours_member_on_battlefield();
+                            } 
+                        }
+                    }      
+                }, 100);    
+            
+                /*以下的setInterval用來控制敵方上場角色移動*/
+                var enemys_member_move_on_battlefield=setInterval(() => {
+                    if(game_is_playing==1){
+                        for(let i=0;i<num_of_enemys_member_on_battlefield;i++){
+                            let the_move_member=document.getElementById('enemys_member_on_battlefield'+i);
+
+                            /*可移動*/
+                            if(data_of_enemys_member_on_battlefield[i].hp>0 && data_of_enemys_member_on_battlefield[i].x>=our_castle_x){
+                                data_of_enemys_member_on_battlefield[i].x+=data_of_enemys_member_on_battlefield[i].speed;
+                                the_move_member.setAttribute('style','position: absolute;top:52%;left:'+data_of_enemys_member_on_battlefield[i].x+'%;width:12.5%;height:12.5%;');
+                            }
+                            /*到達我方主堡*/
+                            else if(data_of_enemys_member_on_battlefield[i].hp>0 && data_of_enemys_member_on_battlefield[i].x<our_castle_x){
+                                ours_HP-=10;
+                                remove_enemys_member_on_battlefield();
+                            }
+                            /*被幹掉*/
+                            else if(data_of_enemys_member_on_battlefield[i].hp<=0){
+                                remove_enemys_member_on_battlefield();
+                            } 
+                        }
+                    }      
+                }, 100);      
+            }
+            /*ours_member_go_to_battlefield(i)這個function用於生產我方單位*/
+            function ours_member_go_to_battlefield(i){
+                if(num_of_ours_member_on_battlefield<max_num_of_ours_member_on_battlefield){
+                    
+                    /*扣除金錢*/
+                    battle_money-=teammember_cost[i];
+
+                    /*設定初始x座標(取得我方主堡x座標)*/
+                    let x=document.getElementById('ours_castle').style.left;
+                    x=x.substr(0,x.length-1);
+                    x=parseInt(x);
+
+                    /*建立單位圖片物件*/
+                    let member=document.createElement('img');
+                    member.setAttribute('src',document.getElementById('teammember'+i).getAttribute('src'));
+                    member.setAttribute('id','ours_member_on_battlefield'+num_of_ours_member_on_battlefield);
+                    member.setAttribute('style','position: absolute;top:52%;left:'+x+'%;width:12.5%;height:12.5%;');
+                    document.body.appendChild(member);
+
+                    /*建立單位屬性*/
+                    let memberid=document.getElementById('teammember'+i).getAttribute('src');
+                    let new_game_stage = JSON.parse(localStorage.getItem("當前關卡"));
+                    memberid=memberid[0];
+                    data_of_ours_member_on_battlefield[num_of_ours_member_on_battlefield]={
+                        id:memberid,/*名稱*/
+                        hp:teammember_hp[i],/*血量*/
+                        atk:teammember_atk[i],/*對城堡的攻擊力*/
+                        x:x,/*x座標(在整個畫面的百分比,初始值為我方主堡的style的left)*/
+                        speed:game_speed/2,/*移動速度*/
+                    };
+                    num_of_ours_member_on_battlefield+=1;
+                }
+                else{
+                    alert("上場人數已經滿了!!")
+                }
+            }           
+            /*enemys_member_go_to_battlefield(i)這個function用於生產敵方單位*/
+            function enemys_member_go_to_battlefield(i){
+                /*扣除金錢*/
+                enemy_battle_money-=enemy_unit_money+game_stage*3;
+                if(num_of_enemys_member_on_battlefield<max_num_of_enemys_member_on_battlefield){
+                    
+                    /*設定初始x座標(取得敵方主堡x座標)*/
+                    let x=document.getElementById('enemys_castle').style.left;
+                    x=x.substr(0,x.length-1);
+                    x=parseInt(x);
+
+                    /*建立單位圖片物件*/
+                    let member=document.createElement('img');
+                    member.setAttribute('src','badguy1.jpg');
+                    member.setAttribute('id','enemys_member_on_battlefield'+num_of_enemys_member_on_battlefield);
+                    member.setAttribute('style','position: absolute;top:52%;left:'+x+'%;width:12.5%;height:12.5%;');
+                    document.body.appendChild(member);
+
+                    /*建立單位屬性*/
+                    let memberid=0;
+                    let new_game_stage = JSON.parse(localStorage.getItem("當前關卡"));
+                    data_of_enemys_member_on_battlefield[num_of_enemys_member_on_battlefield]={
+                        id:memberid,/*名稱*/
+                        hp:enemy_unit_hp[new_game_stage-1],/*血量*/
+                        atk:enemy_unit_atk[new_game_stage-1],/*對城堡的攻擊力*/
+                        x:x,/*x座標(在整個畫面的百分比,初始值為敵方主堡的style的left)*/
+                        speed:-(game_speed/2),/*移動速度*/
+                        }; 
+                    num_of_enemys_member_on_battlefield+=1;
+                }
+            }          
+            /*remove_ours_member_on_battlefield()這個function用於移除我方單位*/
+            function remove_ours_member_on_battlefield(){
+                if(num_of_ours_member_on_battlefield==0){/*戰場上沒有你的隊員，不進行移除隊員*/
+                    return;
+                }
+                else{/*戰場上有你的隊員，進行移除隊員*/
+                    let the_move_member=document.getElementById('ours_member_on_battlefield0');
+                    ours_boom();
+                    if(num_of_ours_member_on_battlefield==1){/*戰場上你的隊員人數只有1個*/
+                        data_of_ours_member_on_battlefield[0]="";
+                    }
+                    else{
+                        for(let i=0;i<num_of_ours_member_on_battlefield-1;i++){
+                            data_of_ours_member_on_battlefield[i]=data_of_ours_member_on_battlefield[i+1];
+                            document.getElementById('ours_member_on_battlefield'+(i+1)).setAttribute('id','ours_member_on_battlefield'+i);
+                        }
+                        data_of_ours_member_on_battlefield[num_of_ours_member_on_battlefield-1]="";
+                    }
+                    num_of_ours_member_on_battlefield-=1;
+                }
+            }
+            /*remove_enemys_member_on_battlefield()這個function用於移除敵方單位*/
+            function remove_enemys_member_on_battlefield(){
+                if(num_of_enemys_member_on_battlefield==0){/*戰場上沒有敵人的隊員，不進行移除隊員*/
+                    return;
+                }
+                else{/*戰場上有敵人的隊員，進行移除隊員*/
+                    let the_move_member=document.getElementById('enemys_member_on_battlefield0');
+                    enemys_boom();
+                    if(num_of_enemys_member_on_battlefield==1){/*戰場上敵人的隊員人數只有1個*/
+                        data_of_enemys_member_on_battlefield[0]="";
+                    }
+                    else{
+                        for(let i=0;i<num_of_enemys_member_on_battlefield-1;i++){
+                            data_of_enemys_member_on_battlefield[i]=data_of_enemys_member_on_battlefield[i+1];
+                            document.getElementById('enemys_member_on_battlefield'+(i+1)).setAttribute('id','enemys_member_on_battlefield'+i);
+                        }
+                        data_of_enemys_member_on_battlefield[num_of_enemys_member_on_battlefield-1]="";
+                    }
+                    num_of_enemys_member_on_battlefield-=1;
+                }
+            }
+            function ours_boom(){/*我方爆炸*/
+                bomb_bgm[num_of_ours_member_on_battlefield].play();
+                let the_move_member=document.getElementById('ours_member_on_battlefield0');
+                the_move_member.setAttribute('src','boon.webp');
+                the_move_member.setAttribute('id','die');
+                setTimeout(() => {
+                    document.body.removeChild(the_move_member);
+                }, 700);
+                
+            }
+            function enemys_boom(){/*敵方爆炸*/
+                bomb_bgm[num_of_enemys_member_on_battlefield+100].play();
+                let the_move_member=document.getElementById('enemys_member_on_battlefield0');
+                the_move_member.setAttribute('src','boon.webp');
+                the_move_member.setAttribute('id','die');
+                setTimeout(() => {
+                    document.body.removeChild(the_move_member);
+                }, 700);
+                
+            }  
+            /*improve_addmoney_speed()這個function用於提高我方金錢產生速率*/
+            function improve_addmoney_speed(){
+                battle_money-=improve_addmoney_speed_money[improve_addmoney_speed_time];
+                improve_addmoney_speed_time+=1;
+                addmoney_per_millisecond+=3;
+                let data=''
+                if(improve_addmoney_speed_time<5){
+                    data="<p>點擊提高我方金錢增加速度</p><hr><p>如果覺得好像打不贏，一定要點這個按鈕!</p><p>成本:<a>"+improve_addmoney_speed_money[improve_addmoney_speed_time]+"</a></p>";
+                }
+                else{
+                    data="<p>點擊提高我方金錢增加速度</p><hr><p>如果覺得好像打不贏，一定要點這個按鈕!</p><p id=max>(金錢增加速度已經達到最高了)</p>";
+                }
+                document.getElementById("description").innerHTML=data;
+            }
+            /*set_description(i)這個function用於設定說明欄位內容*/
+            function set_description(i){
+                if(i==-1){
+                    document.getElementById("description").innerHTML="";
+                    return;
+                }
+                else if(i==9999){/*金錢產量up說明*/
+                    let data=''
+                    if(improve_addmoney_speed_time<5){
+                        data="<p>點擊提高我方金錢增加速度</p><hr><p>如果覺得好像打不贏，一定要點這個按鈕!</p><p>成本:<a>"+improve_addmoney_speed_money[improve_addmoney_speed_time]+"</a></p>";
+                    }
+                    else{
+                        data="<p>點擊提高我方金錢增加速度</p><hr><p>如果覺得好像打不贏，一定要點這個按鈕!</p><p id=max>(金錢增加速度已經達到最高了)</p>";
+                    }
+                    document.getElementById("description").innerHTML=data;
+                    return;
+                }
+                else if(i==99999){
+                    let data=''
+                    if(game_speed==1){
+                        data="<p>點擊變更遊戲速度</p><hr><p>目前遊戲速度為<a>正常</a></p>";
+                    }
+                    else{
+                        data="<p>點擊變更遊戲速度</p><hr><p>目前遊戲速度為<a>"+game_speed+"</a>倍</p>";
+                    }
+                    document.getElementById("description").innerHTML=data;
+                    return;
+                }
+                else if(i==999999){
+                    let data='';
+                    if(game_is_playing==1){
+                        data="<p>點擊遊戲暫停</p><hr><p>目前遊戲為<a>進行</a></p>";
+                    }
+                    else{
+                        data="<p>點擊繼續遊戲</p><hr><p>目前遊戲為<a>暫停</a></p>";
+                    }
+                    document.getElementById("description").innerHTML=data;
+                    return;
+                }
+                let data="<p>點擊生產單位</p><hr><p>戰鬥力:<span>"+description_hp[i]+"</span></p><p>成本:<a>"+unit_money[i]+"</a></p>";
+                document.getElementById("description").innerHTML=data;
+            }         
+            /*changegame_game_speed()這個function用於調整遊戲速度*/
+            function changegame_game_speed(){
+                if(game_is_playing==1){
+                    improve_game_speed_obj=document.getElementById('improve_game_speed')
+                    if(game_speed==1||game_speed==2||game_speed==3){
+                        if(game_speed==1){
+                            game_speed=2;
+                            
+                        }
+                        else if(game_speed==2){
+                            game_speed=3;
+                        }
+                        else{
+                            game_speed=1;
+                        }
+                        improve_game_speed_obj.setAttribute('src','遊戲速度'+game_speed+'.png')
+                        for(i=0;i<num_of_ours_member_on_battlefield;i++){
+                            data_of_ours_member_on_battlefield[i].speed=game_speed/2;
+                        }
+                        for(i=0;i<num_of_enemys_member_on_battlefield;i++){
+                            data_of_enemys_member_on_battlefield[i].speed=-(game_speed/2);
+                        }
+                        if(game_speed==1){
+                        data="<p>點擊變更遊戲速度</p><hr><p>目前遊戲速度為<a>正常</a></p>";
+                        }
+                        else{
+                            data="<p>點擊變更遊戲速度</p><hr><p>目前遊戲速度為<a>"+game_speed+"</a>倍</p>";
+                        }
+                        document.getElementById("description").innerHTML=data;
+                    }
+                    else{
+                        return;
+                    }
+                }
+            }           
+            /* game_pause()這個function用於遊戲暫停/繼續*/
+            function game_pause(){
+                if(game_is_ended!=1){
+                    if(game_is_playing==1){
+                        game_is_playing=0;
+                        document.getElementById('when_game_pause').setAttribute('class','when_game_pause_yes');
+                    }
+                    else{
+                        game_is_playing=1;
+                        document.getElementById('when_game_pause').setAttribute('class','when_game_pause_no');
+                    }
+                    let data='';
+                    if(game_is_playing==1){
+                        data="<p>點擊遊戲暫停</p><hr><p>目前遊戲為<a>進行</a></p>";
+                    }
+                    else{
+                        data="<p>點擊繼續遊戲</p><hr><p>目前遊戲為<a>暫停</a></p>";
+                    }
+                    document.getElementById("description").innerHTML=data;
+                }
+            }           
+            /*game_over()這個function用於操控戰鬥結束後的一切動作*/
+            function game_over(){
+                bgm.pause();
+                ours_HPobj.setAttribute('width',""+max_ours_HP*(ours_HP/max_ours_HP)+"%");
+                enemys_HPobj.setAttribute('width',""+max_enemys_HP*(enemys_HP/max_enemys_HP)+"%");
+                setTimeout(() => {
+                    document.getElementById("gameover_table").setAttribute("style","visibility:visible;");
+                    document.getElementById('when_game_pause').setAttribute('class','when_game_pause_yes');
+                    document.getElementById('when_game_pause').setAttribute('style','z-index:12;');
+                    if(ours_HP<=0 && enemys_HP>0){
+                        gameover_lose_bgm.play();
+                        document.getElementById('gameover_tboby').innerHTML='<tr><th style="height: 60px;font-weight: bold;font-size: 50px;">挑戰失敗...</th></tr><tr><td id="gameover_msg" style="height: 0px;background-color: rosybrown;font-weight: bold;"></td></tr>'
+                        for(let j=1;j<=10;j++){
+                            setTimeout(() => {
+                                document.getElementById('gameover_msg').setAttribute("style","height: "+j*50+"px;background-color: rosybrown;font-weight: bold;")
+                            }, 200+j*50);
+                        }
+                        setTimeout(() => {
+                            document.getElementById('gameover_tboby').innerHTML='<tr><th style="height: 60px;font-weight: bold;font-size: 50px;">挑戰失敗...</th></tr><tr><td  id="gameover_msg" style="height: 500px;background-color: rosybrown;font-weight: bold;font-size: 35px;">很可惜你輸了!重新規劃戰術吧!</td></tr>'
+                        }, 750);
+                        
+                    }
+                    else if(ours_HP>0 && enemys_HP<=0){
+                        gameover_win_bgm.play();
+                        let new_game_stage = JSON.parse(localStorage.getItem("當前關卡"));
+                        let new_money = JSON.parse(localStorage.getItem("金幣"));
+                        document.getElementById('gameover_tboby').innerHTML='<tr><th style="height: 60px;font-weight: bold;font-size: 50px;">挑戰成功!!</th></tr><tr><td id="gameover_msg" style="height: 0px;background-color: rosybrown;font-weight: bold;"></td></tr>'
+                        for(let j=1;j<=10;j++){
+                            setTimeout(() => {
+                                document.getElementById('gameover_msg').setAttribute("style","height: "+j*50+"px;background-color: rosybrown;font-weight: bold;")
+                            }, 200+j*50);
+                        }
+                        setTimeout(() => {
+                            if(max_game_stage<=new_game_stage){
+                                if(new_game_stage==1){
+                                new_money = new_money + 25;
+                                    localStorage.setItem("金幣",new_money);
+                                    document.getElementById('gameover_tboby').innerHTML='<tr><th style="height: 60px;font-weight: bold;font-size: 50px;">挑戰成功!!</th></tr><tr><td  id="gameover_msg" style="height: 500px;background-color: rosybrown;font-weight: bold;">在敵方主堡殘骸到處搜刮<br><br><span style="font-size: 50px;color:red;">發現25枚貝殼!!</span><br><br><span style="font-size: 25px;">賺爛了!賺爛了!</span></td></tr>'
+                                }
+                                else if(new_game_stage==6){
+                                    new_money = new_money + 100;
+                                    localStorage.setItem("金幣",new_money);
+                                    document.getElementById('gameover_tboby').innerHTML='<tr><th style="height: 60px;font-weight: bold;font-size: 50px;">挑戰成功!!</th></tr><tr><td  id="gameover_msg" style="height: 500px;background-color: rosybrown;font-weight: bold;">在敵方主堡殘骸到處搜刮<br><br><span style="font-size: 50px;color:red;">發現100枚貝殼!!!</span><br><br><span style="font-size: 25px;">超爽der!撿到100枚貝殼~</span></td></tr>'
+                                }
+                                else{
+                                    new_money = new_money + 10;
+                                    localStorage.setItem("金幣",new_money);
+                                    document.getElementById('gameover_tboby').innerHTML='<tr><th style="height: 60px;font-weight: bold;font-size: 50px;">挑戰成功!!</th></tr><tr><td id="gameover_msg" style="height:500px;background-color: rosybrown;font-weight: bold;">在敵方主堡殘骸到處搜刮<br><br><span style="font-size: 50px;color:red;">發現10枚貝殼!</span><br><br><span style="font-size: 25px;">將貝殼放入背包</span></td></tr>'
+                                }
+                            }
+                            else{
+                                new_money = new_money + 5;
+                                localStorage.setItem("金幣",new_money);
+                                document.getElementById('gameover_tboby').innerHTML='<tr><th style="height: 60px;font-weight: bold;font-size: 50px;">挑戰成功!!</th></tr><tr><td id="gameover_msg" style="height: 500px;background-color: rosybrown;font-weight: bold;">在敵方主堡殘骸到處搜刮<br><br><span style="font-size: 50px;color:red;">發現5枚貝殼</span><br><br><span style="font-size: 25px;">這裡有價值的東西被拿得差不多了</span></td></tr>'
+                            }
+                        }, 750);
+                        new_game_stage = new_game_stage + 1; 
+                        localStorage.removeItem("當前關卡");
+                        if(localStorage.getItem("闖到第幾關")<new_game_stage){
+                            localStorage.setItem("闖到第幾關",new_game_stage);
+                        }     
+                    }      
+                    else{
+                        alert("平手");//基本上不可能發生
+                    }
+                }, 100);  
+            }
+            window.addEventListener("load",start,false);
+        </script>
+    </head>
+    <body>
+        <div id=body_all style="visibility:hidden" width=100% height=100% >
+            <div class="castle_HP"  style="position: absolute;top:10%;left:5%;">
+                <img id="ours_HP" src="castle_hp.jpg" width=100% height=100% >
+            </div>
+            <div class="castle_HP"  style="position: absolute;top:10%;left:70%;">
+                <img id="enemys_HP" src="castle_hp.jpg" width=100% height=100%>
+            </div>
+            <div class="castle" id="ours_castle"  style="position: absolute;top:14%;left:11%; "></div>
+            <div class="castle" id="enemys_castle"  style="position: absolute;top:14%;left:76%;"></div>
+            <div id="ground" style="position: absolute;top:63%;left:0%;"><img src="草地.jpg" width=100% height=100%></div>
+            <div id='description' class='description' style="position: absolute;top:71%;left:2.5%;"></div>
+            <div id=money_div>
+                <a>金錢:</a>
+                <a id=battle_money>0</a>
+                <a >/</a>
+                <a id=max_battle_money>0</a>
+            </div>
+            <div id='teamblock' onmouseout='set_description(-1)'>
+                <div id='teamblock1' class='teamblock' style="position: absolute;top:71%;left:25%;"></div>
+                <div id='teamblock2' class='teamblock' style="position: absolute;top:71%;left:35%;"></div>
+                <div id='teamblock3' class='teamblock' style="position: absolute;top:71%;left:45%;"></div>
+                <img src="提高金錢產量.png" id="improve_money_yield" class="improve_money_yield_disable">
+                <img src="遊戲速度1.png" id="improve_game_speed" class="improve_game_speed" onclick="changegame_game_speed()" onmouseover="set_description(99999)">
+                <img src="遊戲暫停.png" id="game_pause" class="game_pause" onclick="game_pause()" onmouseover="set_description(999999)">
+                
+            </div> 
+            <a id=msg style="font-size: 100px;color:red; font-weight: bolder;font-style: italic; position:absolute;top:20%;left:50%; margin-left: -150px;z-index:15;"></a>
+            <button id="turn_to_map" class="button button1" style="position: absolute; visibility:visible;" onclick="javascript:location.href='關卡地圖畫面.html'">返回地圖</button>
+        </div>
+        <div id="when_game_pause" class="when_game_pause_no"></div>
+        <table id="gameover_table" style="visibility:hidden;">
+            <tbody id="gameover_tboby">
+            </tbody>
+            <tfoot>
+                <tr><td style="height: 60px;"><button id="turn_to_map_win" class="button button1"onclick="javascript:location.href='關卡地圖畫面.html'">返回地圖</button></td></tr>
+            </tfoot>
+        </table>
+        <button id="ready_fight" class="button button1" style="position:absolute; top:40%; left:50%; margin-left: -100px;visibility: hidden;z-index:15;"  onclick="fight();">F I G H T!!</button>
+    </body>
+</html>

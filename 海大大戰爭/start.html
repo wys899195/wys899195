@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "utf-8">
+        <title>start</title>
+        <style type = "text/css">
+            body {
+                    background-image: url(1-1.png);
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: auto;
+                    background-attachment: fixed;
+                    
+                    
+                   
+            }    
+            .button {
+                border: none;
+                color: black;
+                
+                text-align: center;
+                display: inline-block;
+                padding: 16px 32px; /*按鈕內文字框框比*/
+                font-size: 20px;    /*按鈕大小*/
+                
+                position: absolute;
+                top:50%;
+                left:50%;
+                margin-top: 65px;
+                margin-left: -70px;   /*按鈕位置*/
+                transition-duration: 0.5s; /*speed*/
+                
+                z-index: 0;
+                
+            }
+            .button2 {
+                cursor: pointer;
+                position: absolute;
+                padding: 16px 32px; /*按鈕內文字框框比*/
+                font-size: 20px;    /*按鈕大小*/
+                right:0%;
+                bottom:0%;
+                transition-duration: 0.5s; /*speed*/
+                
+            }
+            .button3 {
+                cursor: pointer;
+                border: none;
+                color: black;
+                
+                text-align: center;
+                display: inline-block;
+                padding: 16px 32px; /*按鈕內文字框框比*/
+                font-size: 20px;    /*按鈕大小*/
+                
+                position: absolute;
+                top:50%;
+                left:50%;
+                margin-top: 133px;
+                margin-left: -70px;   /*按鈕位置*/
+                transition-duration: 0.5s; /*speed*/
+                cursor: pointer;
+                
+            }
+            .button1 {
+                cursor: pointer;
+                background-color:orange; 
+                color: black; 
+                border: 2px solid white;
+            }
+
+            .button1:hover {
+                background-color: orangered;
+                color: black;
+                border: 2px solid blue;
+            }
+            @media screen and (max-width: 600px) {
+                body {
+                    background-image: url(1-1.png);
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-attachment: fixed;
+                    overflow: hidden;
+                    
+                   
+                }  
+                .button {
+                    padding: 8px 16px;
+                    font-size: 10px; 
+                    position: absolute;
+                    top:50%;
+                    left:50%;
+                    margin-top: 50px;
+                    margin-left: -45px;   /*按鈕位置*/
+                }
+                .button2 {
+                    padding: 8px 16px;
+                    font-size: 10px; 
+                    position: absolute;
+                    
+                    margin-right: 0%;
+                    margin-bottom: 0%;   /*按鈕位置*/
+                }
+                .button3 {
+                    padding: 8px 16px;
+                    font-size: 10px; 
+                    position: absolute;
+                    top:50%;
+                    left:50%;
+                    margin-top: 100px;
+                    margin-left: -45px;   /*按鈕位置*/
+                }
+
+            }
+        </style>
+        <script>
+            let newgame=1;
+            function start(){
+                if(!localStorage.getItem("闖到第幾關")){
+                    localStorage.setItem("闖到第幾關",1);
+                }
+                if(!localStorage.getItem('倉庫')){
+                    localStorage.setItem('倉庫',JSON.stringify([0,0,0,0,0,1]));
+                }
+                if(!localStorage.getItem('上場')){
+                    localStorage.setItem('上場',JSON.stringify([0,0,0]));
+                }
+                if(!localStorage.getItem('金幣')){
+                    localStorage.setItem('金幣',100);
+                }
+                if(!localStorage.getItem('是否為新遊戲')){
+                    localStorage.setItem('是否為新遊戲',1);
+                }
+                newgame=localStorage.getItem('是否為新遊戲');
+                if(newgame==1){
+                    document.getElementById("start").setAttribute("class","button");
+                    document.getElementById("start").setAttribute("onclick","");
+                }
+                else{
+                    document.getElementById("start").setAttribute("class","button button1");
+                    document.getElementById("start").setAttribute("onclick","javascript:location.href='關卡地圖畫面.html'");
+                }
+            }
+            function reset(){
+                if(newgame==1){
+                    location.href='關卡地圖畫面.html';
+                }
+                else{
+                    if(confirm("要重新開始遊戲嗎？")){
+                        if(confirm("遊戲已重置，開始作戰吧!")){
+                            localStorage.clear();
+                            if(!localStorage.getItem("闖到第幾關")){
+                                localStorage.setItem("闖到第幾關",1);
+                            }
+                            if(!localStorage.getItem('倉庫')){
+                                localStorage.setItem('倉庫',JSON.stringify([0,0,0,0,0,1]));
+                            }
+                            if(!localStorage.getItem('上場')){
+                                localStorage.setItem('上場',JSON.stringify([0,0,0]));
+                            }
+                            if(!localStorage.getItem('金幣')){
+                                localStorage.setItem('金幣',100);
+                            }
+                            location.href='關卡地圖畫面.html';
+                        }
+                    }
+                }
+                newgame=0;
+                localStorage.setItem('是否為新遊戲',newgame);
+            }
+            window.addEventListener("load",start,false);
+        </script>
+    </head>
+    <body>
+        <button id="start" class="button button1" onclick="javascript:location.href='關卡地圖畫面.html'">繼續遊戲</button>
+        <button id="reset" class="button3 button1" onclick="reset()">開新遊戲</button>
+        
+        <a href="海大大戰爭-00857002+00857039.pptx" id="pptButton" class="pptButton">
+            <button id="ppt" class="button2 button1">說明文件</button>
+        </a>
+    </body>
+</html>
